@@ -4,6 +4,7 @@ const API_URL = '/api/chat';
 const chatMessages = document.getElementById('chat-messages');
 const userInput = document.getElementById('user-input');
 const sendButton = document.getElementById('send-button');
+const audioButton = document.getElementById('stop-audio-button');
 const audio = new Audio('Mario-theme-song.mp3');
 
 // Initialize audio button text
@@ -40,13 +41,29 @@ async function sendMessage() {
     const loadingMessage = addMessage('Thinking...', 'bot');
 
     try {
-        const response = await fetch(API_URL, {
+        const response = await fetch(`${API_URL}?key=${API_KEY}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                message: message
+                contents: [{
+                    role: "user",
+                    parts: [{
+                        text: message
+                    }]
+                }],
+                safetySettings: [{
+                    category: "HARM_CATEGORY_HARASSMENT",
+                    threshold: "BLOCK_NONE"
+                }],
+                generationConfig: {
+                    temperature: 0.9,
+                    topK: 40,
+                    topP: 0.95,
+                    maxOutputTokens: 1024,
+                    candidateCount: 1
+                }
             })
         });
 
@@ -157,6 +174,7 @@ function addMessage(text, sender) {
 }
 
 // Event listeners
+
 sendButton.addEventListener('click', sendMessage);
 userInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
