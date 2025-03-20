@@ -4,6 +4,21 @@ const API_URL = '/api/chat';
 const chatMessages = document.getElementById('chat-messages');
 const userInput = document.getElementById('user-input');
 const sendButton = document.getElementById('send-button');
+const audio = new Audio('Mario-theme-song.mp3');
+
+// Initialize audio button text
+audioButton.textContent = 'Play Audio';
+
+// Audio toggle functionality
+audioButton.addEventListener('click', () => {
+    if (audio.paused) {
+        audio.play();
+        audioButton.textContent = 'Pause Audio';
+    } else {
+        audio.pause();
+        audioButton.textContent = 'Play Audio';
+    }
+});
 
 // Auto-resize textarea
 userInput.addEventListener('input', function() {
