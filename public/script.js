@@ -41,29 +41,13 @@ async function sendMessage() {
     const loadingMessage = addMessage('Thinking...', 'bot');
 
     try {
-        const response = await fetch(`${API_URL}?key=${API_KEY}`, {
+        const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                contents: [{
-                    role: "user",
-                    parts: [{
-                        text: message
-                    }]
-                }],
-                safetySettings: [{
-                    category: "HARM_CATEGORY_HARASSMENT",
-                    threshold: "BLOCK_NONE"
-                }],
-                generationConfig: {
-                    temperature: 0.9,
-                    topK: 40,
-                    topP: 0.95,
-                    maxOutputTokens: 1024,
-                    candidateCount: 1
-                }
+                message: message
             })
         });
 
@@ -88,6 +72,8 @@ async function sendMessage() {
         addMessage(`Sorry, I encountered an error: ${error.message}. Please try again.`, 'bot');
     }
 }
+
+
 
 // Function to parse markdown-like syntax
 function parseMarkdown(text) {
